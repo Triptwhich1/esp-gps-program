@@ -4,6 +4,7 @@
 #include "driver/gpio.h"
 #include "driver/uart.h"
 #include "esp_log.h"
+#include "nmea_parser.hpp"
 
 #define BUFFER_SIZE 512
 
