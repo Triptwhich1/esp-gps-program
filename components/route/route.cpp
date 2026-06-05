@@ -9,7 +9,7 @@ route::~route()
 {
 }
 
-void route::append_to_route(const gps_data& point)
+void route::append_to_route(const gps_data_t& point)
 {
     if (_num_points >= GPS_POINTS_MAX)
     {

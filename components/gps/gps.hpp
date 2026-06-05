@@ -1,10 +1,10 @@
 #pragma once
 
-#include "gps_data.hpp"
+#include "gps_data_t.hpp"
 #include "driver/gpio.h"
 #include "driver/uart.h"
 #include "esp_log.h"
-#include "nmea_parser.hpp"
+#include "nmea_parser/nmea_parser.hpp"
 
 #define BUFFER_SIZE 512
 
