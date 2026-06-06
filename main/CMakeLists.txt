@@ -1,5 +1,5 @@
 idf_component_register(SRCS "main.cpp"
-                    INCLUDE_DIRS "." "args"
-                    REQUIRES gps route)
+                    INCLUDE_DIRS "."
+                    REQUIRES gps route args tasks)
 
 target_compile_options(${COMPONENT_LIB} PRIVATE -std=gnu++11)

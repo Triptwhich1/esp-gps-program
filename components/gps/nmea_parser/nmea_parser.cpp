@@ -9,7 +9,7 @@ struct coordinate {
 };
 
 namespace NMEA{
-    float get_real_coordinate(char* raw_data, char direction) {
+    float get_real_coordinate(const char* raw_data, char direction) {
         if (!raw_data || !direction) return 0; 
         float long_data = strtof(raw_data, NULL);
         int degrees = (int)long_data / 100;
@@ -24,45 +24,50 @@ namespace NMEA{
     //$GPGLL,5224.88965,N,00404.93354,W,233722.00,A,A*7D
     coordinate get_coordinate(char* buffer, int ptr) {
         if (!buffer) return {0};
-        coordinate new_coordinate;
-        char* gpgll = buffer + ptr;
-        char* tok = strtok(gpgll, ",");
-        char* lat_r; 
-        char* lon_r;
-        char* tm;
+        coordinate new_coordinate{};
+
+        char* start = buffer + ptr;
+        char* end = nullptr;
+        std::string lat_r; 
+        std::string lon_r;
+        std::string tm;
         char lat_d, lon_d;
 
         for (size_t i = 0; i < 6; i++) { // gets the important parameters...
-            if (tok == nullptr) {
+            end = strchr(start, ',');
+
+            if (!end) {
                 ESP_LOGI("NMEA", "Incomplete GPGLL Seqeuence");
                 return {0};
             }
+
+            size_t len = end - start; 
+
             switch (i) {  
                 case 1:
-                    lat_r = tok;
+                    lat_r.assign(start, len);
                     break;
                 case 2:
-                    lat_d = tok[0];
+                    lat_d = *start;
                     break;
                 case 3:
-                    lon_r = tok;
+                    lon_r.assign(start, len);
                     break;
                 case 4:
-                    lon_d = tok[0];
+                    lon_d = *start;
                     break;
                 case 5:
-                    tm = tok;
+                    tm.assign(start, len);
                     break;
                 default:
                     break;
             }
-            // ESP_LOGI("TOKEN", "%s", tok);
-            tok = strtok(NULL, ",");
+            start = end + 1;
         }
 
-        new_coordinate.latitude = get_real_coordinate(lat_r, lat_d);
+        new_coordinate.latitude = get_real_coordinate(lat_r.c_str(), lat_d);
         ESP_LOGI("COORD", "%f", new_coordinate.latitude);
-        new_coordinate.longitude = get_real_coordinate(lon_r, lon_d);
+        new_coordinate.longitude = get_real_coordinate(lon_r.c_str(), lon_d);
         ESP_LOGI("COORD", "%f", new_coordinate.longitude);
 
         return {0}; 

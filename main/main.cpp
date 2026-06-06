@@ -5,7 +5,8 @@
 #include "driver/gpio.h"
 #include "driver/uart.h"
 #include "gps.hpp"
-#include "args/task_args.hpp"
+#include "task_args.cpp"
+#include "tasks.hpp"
 
 #define RX2 GPIO_NUM_16
 
@@ -18,6 +19,11 @@ extern "C" void app_main(void)
     ESP_LOGI("info", "program start");
     route_Queue = xQueueCreate(10, sizeof(gps_data_t));
 
+    gps_rx_task_args_t rx_task_args{
+        .gps_arg = &my_gps,
+        .queue_arg = route_Queue
+    };
+
     my_gps.init();
-    xTaskCreate(gps_tasks::rx_task, "rx_task", 4096, &my_gps, 1, NULL);
+    xTaskCreate(gps_tasks::rx_task, "rx_task", 4096, &rx_task_args, 1, NULL);
 }

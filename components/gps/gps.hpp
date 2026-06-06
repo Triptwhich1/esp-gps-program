@@ -19,7 +19,3 @@ public:
     void init();
     uart_port_t get_uart_port();
 };
-
-namespace gps_tasks {
-    void rx_task(void *arg);
-}
