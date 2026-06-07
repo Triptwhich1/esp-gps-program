@@ -3,7 +3,7 @@ namespace gps_tasks {
     void rx_task(void *arg)
     {
         gps_rx_task_args_t *task_args = static_cast<gps_rx_task_args_t*>(arg);
-        
+
         gps *gps_arg = task_args->gps_arg;
         QueueHandle_t queue_arg = task_args->queue_arg;
 
@@ -13,7 +13,7 @@ namespace gps_tasks {
             const int rxBytes = uart_read_bytes(gps_arg->get_uart_port(), buffer, BUFFER_SIZE, pdMS_TO_TICKS(1000));
             if (rxBytes > 0) {
                 NMEA::parse_nmea((char*)buffer);
-                
+                // ESP_LOGI("RAW DATA", "%s", (char*)buffer);
             } else {
                 ESP_LOGW("GPS", "No data received");
             }
