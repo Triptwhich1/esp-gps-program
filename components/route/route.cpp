@@ -19,4 +19,5 @@ void route::append_to_route(const gps_data_t& point)
 
     _gps_points[_num_points] = point;
     _num_points++;
+    ESP_LOGI("APPEND", "Number of points: %d", _num_points);
 }

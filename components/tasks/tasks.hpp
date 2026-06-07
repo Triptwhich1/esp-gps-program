@@ -14,5 +14,5 @@ namespace gps_tasks
 }
 
 namespace route_tasks {
-    //
+    void append_to_route_task(void *arg);
 }

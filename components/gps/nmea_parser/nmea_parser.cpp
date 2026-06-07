@@ -82,6 +82,7 @@ namespace NMEA{
         ESP_LOGI("GPGGA", "Time: %s", gpgga_data.time.c_str());
         if (gpgga_data.fix_quality == 0) {
             ESP_LOGW("GPGGA", "No GPS fix");
+            return {};
         } else {
             ESP_LOGI("GPGGA", "Fix acquired: quality=%d", gpgga_data.fix_quality);
         }
