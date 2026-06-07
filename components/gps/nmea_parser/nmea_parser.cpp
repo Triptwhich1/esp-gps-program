@@ -79,7 +79,7 @@ namespace NMEA{
         gpgga_data.latitude = get_real_coordinate(lat_r.c_str(), lat_d);
         gpgga_data.longitude = get_real_coordinate(lon_r.c_str(), lon_d);
 
-        ESP_LOGD("GPGGA", "Time: %s", gpgga_data.time.c_str());
+        ESP_LOGI("GPGGA", "Time: %s", gpgga_data.time.c_str());
         if (gpgga_data.fix_quality == 0) {
             ESP_LOGW("GPGGA", "No GPS fix");
         } else {
@@ -89,18 +89,26 @@ namespace NMEA{
                     gpgga_data.latitude,
                     gpgga_data.longitude,
                     gpgga_data.fix_quality);
+        ESP_LOGI("GPGGA", "Altitude: %.2f", gpgga_data.altitude);
 
         return gpgga_data;
     }
 
     gps_data_t parse_nmea(char* buffer) {
-        gps_data_t new_gps_data = {0};
+        gps_data_t gps_data = {0};
         size_t ptr = 0;
         std::string str_buffer = buffer;
 
         ptr = str_buffer.find("$GPGGA");
-        parse_gpgga(buffer, ptr);
+        gpgga_data_t gpgga_data = parse_gpgga(buffer, ptr);
 
-        return{};
+        if (gpgga_data.fix_quality == 0) return {}; // if nothing 
+
+        gps_data.altitude = gpgga_data.altitude;
+        gps_data.latitude = gpgga_data.latitude;
+        gps_data.longitude = gpgga_data.longitude;
+        gps_data.time = gpgga_data.time;
+        
+        return gps_data;
     }
 }

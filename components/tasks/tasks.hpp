@@ -12,3 +12,7 @@ namespace gps_tasks
 {
     void rx_task(void *arg);
 }
+
+namespace route_tasks {
+    //
+}

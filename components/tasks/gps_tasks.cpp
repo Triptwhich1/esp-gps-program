@@ -12,8 +12,8 @@ namespace gps_tasks {
         while (1) {
             const int rxBytes = uart_read_bytes(gps_arg->get_uart_port(), buffer, BUFFER_SIZE, pdMS_TO_TICKS(1000));
             if (rxBytes > 0) {
-                NMEA::parse_nmea((char*)buffer);
-                // ESP_LOGI("RAW DATA", "%s", (char*)buffer);
+                gps_data_t gps_data = NMEA::parse_nmea((char*)buffer);
+                // xQueueSend(queue_arg, &gps_data, pdMS_TO_TICKS(10));
             } else {
                 ESP_LOGW("GPS", "No data received");
             }
