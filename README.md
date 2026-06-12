@@ -24,5 +24,5 @@ into components.
 ## Future improvements
 - Sleep efficiency
 - Visualise recorded routes through a web-based interface.
--- Render routes in a 3D environment for post-hike analysis.
+  - Render routes in a 3D environment for post-hike analysis.
 - Add SD card storage for longer route recording sessions.
