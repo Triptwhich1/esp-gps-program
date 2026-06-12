@@ -6,6 +6,23 @@ It has been created with ESP-IDF and takes power efficiency into consideration a
 OOP has been used when creating this, as it was something I wanted to learn a bit more about especially on embedded systems, this goes hand-in-hand with ESP-IDF's modular file structure where features can be split
 into components.
 
-## What I want for this in the future
+## Features
+- GPS route recording using a NEO-6M receiver
+- Configurable logging intervals
+- OLED status display
+- Custom NMEA sentence parsing
+- FreeRTOS task-based architecture
+- Modular ESP-IDF component structure
+
+## Technology Used
+- C++
+- ESP-IDF
+- FreeRTOS
+- UART communication
+- NMEA GPS protocol
+
+## Future improvements
 - Sleep efficiency
-- Displaying the route in 3D space on an external webpage
+- Visualise recorded routes through a web-based interface.
+-- Render routes in a 3D environment for post-hike analysis.
+- Add SD card storage for longer route recording sessions.
