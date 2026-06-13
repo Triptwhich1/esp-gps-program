@@ -9,6 +9,7 @@
 #include "task_args.cpp"
 #include "tasks.hpp"
 #include "timer.hpp"
+#include "esp_pm.h"
 
 #define RX2 GPIO_NUM_16
 #define BTN_PIN GPIO_NUM_12
@@ -27,9 +28,21 @@ void append_to_route_timer_cb (TimerHandle_t xTimer) {
     }
 }
 
+void pm_init() {
+    esp_pm_config_t pm_config {
+        .max_freq_mhz = 160,
+        .min_freq_mhz = 40,
+        .light_sleep_enable = true
+    };
+
+    esp_pm_configure(&pm_config);
+}
+
 extern "C" void app_main(void)
 {
     ESP_LOGI("info", "program start");
+    // pm_init();
+
     route_Queue = xQueueCreate(10, sizeof(gps_data_t));
 
     static gps_rx_task_args_t rx_task_args{
