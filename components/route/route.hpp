@@ -21,4 +21,5 @@ public:
     route();
     ~route();
     void append_to_route(const gps_data_t& point);
+    uint16_t get_num_points();
 };

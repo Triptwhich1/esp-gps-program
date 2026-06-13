@@ -27,3 +27,7 @@ void route::append_to_route(const gps_data_t& point)
     _num_points++;
     ESP_LOGI("APPEND", "Number of points: %d", _num_points);
 }
+
+uint16_t route::get_num_points() {
+    return _num_points;
+}

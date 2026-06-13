@@ -1,4 +1,4 @@
 idf_component_register(SRCS "gps_tasks.cpp" "route_tasks.cpp"
                     INCLUDE_DIRS "."
-                    REQUIRES gps args route)
+                    REQUIRES gps args route screen)
 

@@ -15,6 +15,7 @@ namespace route_tasks {
             gps_data_t gps_data;
             if (xQueueReceive(queue_arg, &gps_data, pdMS_TO_TICKS(2500))) {
                 route_arg->append_to_route(gps_data);
+                lvgl_screens::update_overview_screen(route_arg->get_num_points());
             };
         }
     }
