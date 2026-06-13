@@ -20,7 +20,7 @@ QueueHandle_t route_Queue;
 gps my_gps{UART_NUM_2, RX2};
 route my_route{};
 screen my_screen{GPIO_NUM_22, GPIO_NUM_21, 128, 64};
-timer append_timer{1};
+timer append_timer{15};
 
 static TaskHandle_t append_to_route_task_handle = NULL;
 static TaskHandle_t gps_rx_task_handle = NULL;
@@ -54,15 +54,14 @@ extern "C" void app_main(void)
     };
 
     my_screen.init();
-    // my_screen.show_overview();
-
-    lvgl_screens::draw_overview_screen();
+    my_screen.show_overview();
 
     my_gps.init();
     xTaskCreate(gps_tasks::rx_task, "rx_task", 4096, &rx_task_args, 1, &gps_rx_task_handle);
 
     static route_append_task_args_t append_task_args {
         .route_arg = &my_route,
+        .screen_arg = &my_screen,
         .queue_arg = route_Queue,
         .rx_handle = gps_rx_task_handle
     };

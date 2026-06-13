@@ -26,28 +26,30 @@ esp_err_t screen::init() {
     lvgl_setup::lvgl_init();
     lvgl_setup::lvgl_port_add_screen(screen_args, _screen_width, _screen_height);
 
-    
     return ESP_OK;
 }
 
 void screen::show_overview() {
     if (lvgl_port_lock(0)) {
-        lv_obj_t * scr = lv_scr_act();
+        lvgl_screens::draw_overview_screen();
+        lvgl_port_unlock();
+    }
+}
 
-        lv_obj_t * label = lv_label_create(scr);
-        lv_label_set_text(label, "Hello World!");
+void screen::update_overview(route* route_arg) {
+    if (lvgl_port_lock(0)) {
+        lvgl_screens::update_overview_screen(route_arg);
+        lvgl_port_unlock();
+    }
+}
 
-        lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
-
+void screen::display_route_summary(route* route_arg) {
+    if (lvgl_port_lock(0)) {
         lvgl_port_unlock();
     }
 }
 
 void screen::display_qr_code() {
-    
-}
-
-void screen::display_route_summary() {
     
 }
 

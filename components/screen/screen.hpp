@@ -4,6 +4,7 @@
 #include "i2c_setup/i2c_setup.hpp"
 #include "lvgl_setup/lvgl_setup.hpp"
 #include "args/screen_args.hpp"
+#include "lvgl_screens/screens.hpp"
 
 class screen
 {
@@ -18,8 +19,10 @@ public:
     esp_err_t init();
     
     void show_overview();
+    void update_overview(route* route_arg);
+
     void display_qr_code();
-    void display_route_summary();
+    void display_route_summary(route* route_arg);
 
     uint8_t get_screen_width();
     uint8_t get_screen_height();
