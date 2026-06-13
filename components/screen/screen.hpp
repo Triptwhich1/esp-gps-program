@@ -2,6 +2,8 @@
 
 #include "driver/gpio.h"
 #include "i2c_setup/i2c_setup.hpp"
+#include "lvgl_setup/lvgl_setup.hpp"
+#include "args/screen_args.hpp"
 
 class screen
 {

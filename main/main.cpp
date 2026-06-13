@@ -18,7 +18,7 @@
 QueueHandle_t route_Queue;
 gps my_gps{UART_NUM_2, RX2};
 route my_route{};
-screen my_screen{GPIO_NUM_21, GPIO_NUM_22, 128, 64};
+screen my_screen{GPIO_NUM_22, GPIO_NUM_21, 128, 64};
 timer append_timer{1};
 
 static TaskHandle_t append_to_route_task_handle = NULL;
