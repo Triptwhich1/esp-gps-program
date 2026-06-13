@@ -10,6 +10,7 @@
 #include "tasks.hpp"
 #include "timer.hpp"
 #include "esp_pm.h"
+#include "screen.hpp"
 
 #define RX2 GPIO_NUM_16
 #define BTN_PIN GPIO_NUM_12
@@ -17,7 +18,8 @@
 QueueHandle_t route_Queue;
 gps my_gps{UART_NUM_2, RX2};
 route my_route{};
-timer append_timer{30};
+screen my_screen{GPIO_NUM_21, GPIO_NUM_22, 128, 64};
+timer append_timer{1};
 
 static TaskHandle_t append_to_route_task_handle = NULL;
 static TaskHandle_t gps_rx_task_handle = NULL;
@@ -49,6 +51,8 @@ extern "C" void app_main(void)
         .gps_arg = &my_gps,
         .queue_arg = route_Queue
     };
+
+    my_screen.init();
 
     my_gps.init();
     xTaskCreate(gps_tasks::rx_task, "rx_task", 4096, &rx_task_args, 1, &gps_rx_task_handle);

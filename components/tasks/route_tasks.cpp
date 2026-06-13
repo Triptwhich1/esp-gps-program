@@ -13,7 +13,7 @@ namespace route_tasks {
             xTaskNotifyGive(rx_handle);
 
             gps_data_t gps_data;
-            if (xQueueReceive(queue_arg, &gps_data, pdMS_TO_TICKS(5000))) {
+            if (xQueueReceive(queue_arg, &gps_data, pdMS_TO_TICKS(2500))) {
                 route_arg->append_to_route(gps_data);
             };
         }
