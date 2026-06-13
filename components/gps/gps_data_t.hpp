@@ -5,5 +5,5 @@ struct gps_data_t {
     float latitude;
     float longitude;
     float altitude;
-    std::string time;
+    char time[7];
 };

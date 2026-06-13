@@ -3,7 +3,7 @@
 #include "esp_log.h"
 
 struct gpgga_data_t {
-    std::string time;
+    char time[7];
     float latitude;
     float longitude;
     uint8_t fix_quality;
@@ -23,7 +23,7 @@ namespace NMEA{
             return decimal_val;
         }
     }
-    //$GPGLL,5224.88965,N,00404.93354,W,233722.00,A,A*7D
+    
     gpgga_data_t parse_gpgga(char* buffer, int ptr) {
         if (!buffer) return {};
         gpgga_data_t gpgga_data{};
@@ -32,7 +32,7 @@ namespace NMEA{
         char* end = nullptr;
         std::string lat_r; 
         std::string lon_r;
-        std::string tm;
+        std::string gpgga_tm;
         char lat_d = '\0';
         char lon_d = '\0';
 
@@ -48,7 +48,8 @@ namespace NMEA{
 
             switch (i) {  
                 case 1:
-                    gpgga_data.time.assign(start, len);
+                    gpgga_tm.assign(start, len);
+                    strncpy(gpgga_data.time, gpgga_tm.c_str(), sizeof(gpgga_data.time) - 1);
                     break;
                 case 2:
                     lat_r.assign(start, len);
@@ -64,8 +65,6 @@ namespace NMEA{
                     break;
                 case 6:
                     gpgga_data.fix_quality = (len > 0) ? *start - '0' : 0;
-
-
                     break;
                 case 9: 
                     gpgga_data.altitude = std::atof(start);
@@ -79,7 +78,7 @@ namespace NMEA{
         gpgga_data.latitude = get_real_coordinate(lat_r.c_str(), lat_d);
         gpgga_data.longitude = get_real_coordinate(lon_r.c_str(), lon_d);
 
-        ESP_LOGI("GPGGA", "Time: %s", gpgga_data.time.c_str());
+        ESP_LOGI("GPGGA", "Time: %s", gpgga_data.time);
         if (gpgga_data.fix_quality == 0) {
             ESP_LOGW("GPGGA", "No GPS fix");
             return {};
@@ -108,7 +107,7 @@ namespace NMEA{
         gps_data.altitude = gpgga_data.altitude;
         gps_data.latitude = gpgga_data.latitude;
         gps_data.longitude = gpgga_data.longitude;
-        gps_data.time = gpgga_data.time;
+        strncpy(gps_data.time, gpgga_data.time, sizeof(gpgga_data.time) - 1);
         
         return gps_data;
     }

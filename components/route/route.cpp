@@ -17,6 +17,12 @@ void route::append_to_route(const gps_data_t& point)
         return;
     }
 
+    if (point.latitude == 0.0 && point.longitude == 0.0 && point.altitude == 0.0)
+    {
+        ESP_LOGW("APPEND", "Invalid point, skipping");
+        return;
+    }
+
     _gps_points[_num_points] = point;
     _num_points++;
     ESP_LOGI("APPEND", "Number of points: %d", _num_points);
