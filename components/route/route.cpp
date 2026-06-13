@@ -31,3 +31,10 @@ void route::append_to_route(const gps_data_t& point)
 uint16_t route::get_num_points() {
     return _num_points;
 }
+
+gps_data_t* route::get_latest_gps_point() {
+    if (_num_points == 0) {
+        return nullptr;
+    }
+    return &_gps_points[_num_points - 1];
+}
