@@ -17,10 +17,11 @@ namespace lvgl_setup {
             .io_handle = screen_args.io_handle,
             .panel_handle = screen_args.panel_handle,
             .buffer_size = static_cast<uint32_t>(screen_width) * static_cast<uint32_t>(screen_height),
-            .double_buffer = true,
-            .hres = screen_width,
-            .vres = screen_height,
-            .monochrome = false,
+            .double_buffer = false,
+            .hres = 128,
+            .vres = 64,
+            .monochrome = true,
+            .color_format = LV_COLOR_FORMAT_I1,
         };
         disp_handle = lvgl_port_add_disp(&disp_cfg);
     }

@@ -11,6 +11,7 @@
 #include "timer.hpp"
 #include "esp_pm.h"
 #include "screen.hpp"
+#include "lvgl_screens/screens.hpp"
 
 #define RX2 GPIO_NUM_16
 #define BTN_PIN GPIO_NUM_12
@@ -53,6 +54,9 @@ extern "C" void app_main(void)
     };
 
     my_screen.init();
+    // my_screen.show_overview();
+
+    lvgl_screens::draw_overview_screen();
 
     my_gps.init();
     xTaskCreate(gps_tasks::rx_task, "rx_task", 4096, &rx_task_args, 1, &gps_rx_task_handle);
@@ -67,4 +71,9 @@ extern "C" void app_main(void)
 
     TimerHandle_t append_timer_handle = xTimerCreate("append_timer", pdMS_TO_TICKS(append_timer.get_interval() * 1000), pdTRUE, NULL, append_to_route_timer_cb);
     xTimerStart(append_timer_handle, 0);
+
+
+    while (1) {
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
 }

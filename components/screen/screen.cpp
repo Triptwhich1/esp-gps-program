@@ -18,13 +18,29 @@ uint8_t screen::get_screen_height() {
 
 esp_err_t screen::init() {
     lcd_screen_args_t screen_args = i2c_setup::i2c_lcd_panel_init_sequence(_sda_pin, _scl_pin);
+
+    esp_lcd_panel_reset(screen_args.panel_handle);
+    esp_lcd_panel_init(screen_args.panel_handle);
+    esp_lcd_panel_disp_on_off(screen_args.panel_handle, true);
+
     lvgl_setup::lvgl_init();
     lvgl_setup::lvgl_port_add_screen(screen_args, _screen_width, _screen_height);
+
+    
     return ESP_OK;
 }
 
 void screen::show_overview() {
+    if (lvgl_port_lock(0)) {
+        lv_obj_t * scr = lv_scr_act();
 
+        lv_obj_t * label = lv_label_create(scr);
+        lv_label_set_text(label, "Hello World!");
+
+        lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+
+        lvgl_port_unlock();
+    }
 }
 
 void screen::display_qr_code() {
