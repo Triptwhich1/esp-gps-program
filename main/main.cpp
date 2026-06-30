@@ -12,15 +12,22 @@
 #include "esp_pm.h"
 #include "screen.hpp"
 #include "lvgl_screens/screens.hpp"
+#include "navigation.hpp"
+
+#include "iot_button.h"
+#include "button_gpio.h"
+
 
 #define RX2 GPIO_NUM_16
 #define BTN_PIN GPIO_NUM_12
 
 QueueHandle_t route_Queue;
+QueueHandle_t navigation_Queue;
 gps my_gps{UART_NUM_2, RX2};
 route my_route{};
 screen my_screen{GPIO_NUM_22, GPIO_NUM_21, 128, 64};
 timer append_timer{3};
+button_handle_t btn;
 
 static TaskHandle_t append_to_route_task_handle = NULL;
 static TaskHandle_t gps_rx_task_handle = NULL;
@@ -41,10 +48,28 @@ void pm_init() {
     esp_pm_configure(&pm_config);
 }
 
+void btn_init() {
+
+    button_config_t cfg = {
+        .long_press_time = 1500,
+        .short_press_time = 100
+    };
+
+    button_gpio_config_t gpio_cfg = {
+        .gpio_num = BTN_PIN,
+        .active_level = 0
+    };
+
+    iot_button_new_gpio_device(&cfg, &gpio_cfg, &btn);
+    iot_button_register_cb(btn, BUTTON_SINGLE_CLICK, NULL, navigation::short_press_cb, NULL);
+}
+
 extern "C" void app_main(void)
 {
     ESP_LOGI("info", "program start");
+
     // pm_init();
+    btn_init();
 
     route_Queue = xQueueCreate(10, sizeof(gps_data_t));
 

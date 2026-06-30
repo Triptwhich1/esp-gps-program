@@ -18,3 +18,7 @@ namespace gps_tasks
 namespace route_tasks {
     void append_to_route_task(void *arg);
 }
+
+namespace navigation_tasks {
+    void navigation_task(void *arg);
+}
