@@ -28,22 +28,29 @@ namespace lvgl_screens {
 
             label_route_points = lv_label_create(lv_screen_active());
             lv_obj_set_pos(label_route_points, 52, 9);
-            lv_label_set_text(label_route_points, "Point no: %d");
+            lv_label_set_text(label_route_points, "Point no: 0");
             lv_obj_set_style_text_font(label_route_points, &lv_font_montserrat_8, 0);
 
             label_latitude = lv_label_create(lv_screen_active());
             lv_obj_set_pos(label_latitude, 52, 17);
-            lv_label_set_text(label_latitude, "Lat: %f");
+            lv_label_set_text(label_latitude, "");
             lv_obj_set_style_text_font(label_latitude, &lv_font_montserrat_8, 0);
 
             label_longitude = lv_label_create(lv_screen_active());
             lv_obj_set_pos(label_longitude, 52, 26);
-            lv_label_set_text(label_longitude, "Lon: %f");
+            lv_label_set_text(label_longitude, "");
             lv_obj_set_style_text_font(label_longitude, &lv_font_montserrat_8, 0);
 
             lvgl_port_unlock();
         }
     }
+
+    char* get_coord_as_string(float coord) {
+        static char buffer[20];
+        snprintf(buffer, sizeof(buffer), "%.6f", coord);
+        return buffer;
+    }
+
     void update_overview_screen(route* route_arg) {
         if (route_arg == nullptr) {
             ESP_LOGE("LVGL", "Route argument is null");
@@ -56,8 +63,13 @@ namespace lvgl_screens {
         }
         if (lvgl_port_lock(0)) {
             lv_label_set_text_fmt(label_route_points, "Point no: %d", route_arg->get_num_points());
-            lv_label_set_text_fmt(label_latitude, "Lat: %f", latest_point->latitude);
-            lv_label_set_text_fmt(label_longitude, "Lon: %f", latest_point->longitude);
+            lv_label_set_text(label_latitude, get_coord_as_string(latest_point->latitude));
+            lv_label_set_text(label_longitude, get_coord_as_string(latest_point->longitude));
+            lv_label_set_text_fmt(label_time,
+                                "%.2s:%.2s:%.2s",
+                                latest_point->time,
+                                latest_point->time + 2,
+                                latest_point->time + 4);
             lvgl_port_unlock();
         }
     }
