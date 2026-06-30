@@ -79,7 +79,7 @@ namespace NMEA{
         gpgga_data.longitude = get_real_coordinate(lon_r.c_str(), lon_d);
 
         ESP_LOGI("GPGGA", "Time: %s", gpgga_data.time);
-        if (gpgga_data.fix_quality == 0) {
+        if (gpgga_data.fix_quality == 0 || gpgga_data.fix_quality > 5) {
             ESP_LOGW("GPGGA", "No GPS fix");
             return {};
         } else {

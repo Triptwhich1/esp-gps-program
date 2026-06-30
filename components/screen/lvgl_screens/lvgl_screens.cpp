@@ -65,11 +65,17 @@ namespace lvgl_screens {
             lv_label_set_text_fmt(label_route_points, "Point no: %d", route_arg->get_num_points());
             lv_label_set_text(label_latitude, get_coord_as_string(latest_point->latitude));
             lv_label_set_text(label_longitude, get_coord_as_string(latest_point->longitude));
+            lvgl_port_unlock();
+        }
+    }
+
+    void update_overview_screen_time(const char* time_str) {
+        if (lvgl_port_lock(0)) {
             lv_label_set_text_fmt(label_time,
-                                "%.2s:%.2s:%.2s",
-                                latest_point->time,
-                                latest_point->time + 2,
-                                latest_point->time + 4);
+                "%.2s:%.2s:%.2s",
+                time_str,
+                time_str + 2,
+                time_str + 4);
             lvgl_port_unlock();
         }
     }
