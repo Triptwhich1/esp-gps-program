@@ -26,11 +26,12 @@ QueueHandle_t navigation_Queue;
 gps my_gps{UART_NUM_2, RX2};
 route my_route{};
 screen my_screen{GPIO_NUM_22, GPIO_NUM_21, 128, 64};
-timer append_timer{3};
+timer append_timer{15};
 button_handle_t btn;
 
 static TaskHandle_t append_to_route_task_handle = NULL;
 static TaskHandle_t gps_rx_task_handle = NULL;
+static TaskHandle_t navigation_task_handle = NULL;
 
 void append_to_route_timer_cb (TimerHandle_t xTimer) {
     if (append_to_route_task_handle != NULL) {
@@ -61,7 +62,7 @@ void btn_init() {
     };
 
     iot_button_new_gpio_device(&cfg, &gpio_cfg, &btn);
-    iot_button_register_cb(btn, BUTTON_SINGLE_CLICK, NULL, navigation::short_press_cb, NULL);
+    iot_button_register_cb(btn, BUTTON_SINGLE_CLICK, NULL, navigation::short_press_cb, navigation_task_handle);
 }
 
 extern "C" void app_main(void)
@@ -69,7 +70,6 @@ extern "C" void app_main(void)
     ESP_LOGI("info", "program start");
 
     // pm_init();
-    btn_init();
 
     route_Queue = xQueueCreate(10, sizeof(gps_data_t));
 
@@ -79,8 +79,6 @@ extern "C" void app_main(void)
     };
 
     my_screen.init();
-    my_screen.show_overview();
-
     my_gps.init();
     xTaskCreate(gps_tasks::rx_task, "rx_task", 4096, &rx_task_args, 1, &gps_rx_task_handle);
 
@@ -91,10 +89,18 @@ extern "C" void app_main(void)
         .rx_handle = gps_rx_task_handle
     };
 
+    static navigation_task_args_t navigation_task_args {
+        .screen_arg = &my_screen
+    };
+
     xTaskCreate(route_tasks::append_to_route_task, "append_task", 4096, &append_task_args, 1, &append_to_route_task_handle);
 
     TimerHandle_t append_timer_handle = xTimerCreate("append_timer", pdMS_TO_TICKS(append_timer.get_interval() * 1000), pdTRUE, NULL, append_to_route_timer_cb);
     xTimerStart(append_timer_handle, 0);
+
+    xTaskCreate(navigation_tasks::navigation_task, "navigation_task", 2048, &navigation_task_args, 1, &navigation_task_handle);
+
+    btn_init();
 
     while (1) {
         vTaskDelay(pdMS_TO_TICKS(1000));

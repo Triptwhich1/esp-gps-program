@@ -18,3 +18,7 @@ struct route_append_task_args_t {
     QueueHandle_t queue_arg;
     TaskHandle_t rx_handle;
 };
+
+struct navigation_task_args_t {
+    screen *screen_arg;
+};

@@ -26,30 +26,47 @@ esp_err_t screen::init() {
     lvgl_setup::lvgl_init();
     lvgl_setup::lvgl_port_add_screen(screen_args, _screen_width, _screen_height);
 
+    overview_screen::draw_overview_screen();
     return ESP_OK;
-}
-
-void screen::show_overview() {
-    if (lvgl_port_lock(0)) {
-        lvgl_screens::draw_overview_screen();
-        lvgl_port_unlock();
-    }
 }
 
 void screen::update_overview(route* route_arg) {
     if (lvgl_port_lock(0)) {
-        lvgl_screens::update_overview_screen(route_arg);
+        overview_screen::update_overview_screen(route_arg);
         lvgl_port_unlock();
     }
 }
 
-void screen::display_route_summary(route* route_arg) {
+void screen::set_state(screen_state_t new_state)
+{
+    if (_current_screen_state == new_state) return;
+
+    _current_screen_state = new_state;
+
     if (lvgl_port_lock(0)) {
+
+        lv_obj_clean(lv_scr_act());  // clear previous screen
+
+        switch (_current_screen_state) {
+            case screen_state_t::OVERVIEW:
+                overview_screen::draw_overview_screen();
+                break;
+
+            case screen_state_t::ROUTE_SUMMARY:
+                // route_summary_screen::draw_route_summary_screen();
+                ESP_LOGI("Screen", "Route summary screen not implemented yet");
+                break;
+
+            case screen_state_t::QR_CODE:
+                qr_code_screen::draw_qr_screen();
+                break;
+        }
+
         lvgl_port_unlock();
     }
 }
 
-void screen::display_qr_code() {
-    
+screen_state_t screen::next_state() {
+    screen_state_t next_state = static_cast<screen_state_t>((static_cast<int>(_current_screen_state) + 1) % 3);
+    return next_state;
 }
-

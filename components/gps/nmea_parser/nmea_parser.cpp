@@ -23,7 +23,8 @@ namespace NMEA{
             return decimal_val;
         }
     }
-    
+
+   
     gpgga_data_t parse_gpgga(char* buffer, int ptr) {
         if (!buffer) return {};
         gpgga_data_t gpgga_data{};
@@ -79,7 +80,7 @@ namespace NMEA{
         gpgga_data.longitude = get_real_coordinate(lon_r.c_str(), lon_d);
 
         ESP_LOGI("GPGGA", "Time: %s", gpgga_data.time);
-        if (gpgga_data.fix_quality == 0 || gpgga_data.fix_quality > 5) {
+        if (gpgga_data.fix_quality == 0) {
             ESP_LOGW("GPGGA", "No GPS fix");
             return {};
         } else {
@@ -108,7 +109,7 @@ namespace NMEA{
         gps_data.latitude = gpgga_data.latitude;
         gps_data.longitude = gpgga_data.longitude;
         strncpy(gps_data.time, gpgga_data.time, sizeof(gpgga_data.time) - 1);
-        
+
         return gps_data;
     }
 }

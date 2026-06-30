@@ -9,6 +9,7 @@
 #include "lvgl_screens/screens.hpp"
 
 #define BUFFER_SIZE 512
+#define GPS_RETRIEVE_MAX_ATTEMPTS 3
 
 namespace gps_tasks
 {

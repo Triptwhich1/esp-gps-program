@@ -10,15 +10,13 @@ route::~route()
 }
 
 bool check_if_valid_gps_point(gps_data_t point, gps_data_t prev_point) {
-    if (point.latitude == 0.0 && point.longitude == 0.0 && point.altitude == 0.0) {
-        return false;
-    }
+    if (point.latitude == 0.0 && point.longitude == 0.0 && point.altitude == 0.0) return false;
 
     const float padding = 3.0f;
     if (point.latitude < (prev_point.latitude - padding) &&
-        point.longitude < (prev_point.longitude - padding)) {
-        return false;
-    }
+        point.longitude < (prev_point.longitude - padding)) return false;
+
+    if (abs(point.latitude) > 90 || abs(point.longitude) > 180) return false;
 
     return true;
 }
