@@ -12,7 +12,6 @@
 #include "esp_pm.h"
 #include "screen.hpp"
 #include "lvgl_screens/screens.hpp"
-#include "draw_qr.hpp"
 
 #define RX2 GPIO_NUM_16
 #define BTN_PIN GPIO_NUM_12

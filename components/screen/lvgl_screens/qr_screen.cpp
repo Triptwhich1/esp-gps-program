@@ -1,4 +1,4 @@
-#include "draw_qr.hpp"
+#include "qr_screen.hpp"
 
 #define QRCODE_SIZE 32
 #define MODULE_SIZE 2
