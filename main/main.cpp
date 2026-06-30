@@ -72,10 +72,6 @@ extern "C" void app_main(void)
     TimerHandle_t append_timer_handle = xTimerCreate("append_timer", pdMS_TO_TICKS(append_timer.get_interval() * 1000), pdTRUE, NULL, append_to_route_timer_cb);
     xTimerStart(append_timer_handle, 0);
 
-    qr_code::qr_canvas_init();
-    qr_code::draw_qr_code("Hello, World!");
-    qr_code::load_qr_screen();
-
     while (1) {
         vTaskDelay(pdMS_TO_TICKS(1000));
     }

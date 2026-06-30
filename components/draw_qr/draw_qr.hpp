@@ -1,6 +1,10 @@
 #pragma once
 
-#include "draw_qr.hpp"
+#include "esp_lvgl_port.h"
+#include "lvgl.h"
+#include "qrcode.h"
+#include "esp_log.h"
+#include <cstring>
 
 namespace qr_code {
     void qr_canvas_init();
