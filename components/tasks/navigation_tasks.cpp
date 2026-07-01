@@ -15,8 +15,14 @@ namespace navigation_tasks {
             switch (button_event) {
                 case BUTTON_SINGLE_CLICK: 
                     if (my_screen->get_state() == screen_state_t::INACTIVE) {
-                        ESP_LOGI("Navigation", "Screen is inactive, activating overview screen");
+                        ESP_LOGI("Navigation", "Screen is inactive");
                         my_screen->set_state(screen_state_t::OVERVIEW, my_route);
+                    } else if (my_screen->get_state() == screen_state_t::TITLE) {
+                        ESP_LOGI("Navigation", "Screen is in title state");
+                    //     my_screen->set_state(screen_state_t::OVERVIEW, my_route);
+                    // } else if (my_screen->get_state() == screen_state_t::POPUP) {
+                        // ESP_LOGI("Navigation", "Screen popup");
+                        // my_screen->set_state(my_screen->next_state(), my_route);
                     } else {
                         ESP_LOGI("Navigation", "Single button press detected, cycling to next screen");
                         my_screen->set_state(my_screen->next_state(), my_route);

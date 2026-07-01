@@ -26,7 +26,7 @@ esp_err_t screen::init() {
     lvgl_setup::lvgl_init();
     lvgl_setup::lvgl_port_add_screen(screen_args, _screen_width, _screen_height);
 
-    overview_screen::draw_overview_screen();
+    title_screen::draw_title_screen();
     return ESP_OK;
 }
 
@@ -65,6 +65,14 @@ void screen::set_state(screen_state_t new_state, route* curr_route)
                 inactive_screen::draw_inactive_screen();
                 break;
 
+            case screen_state_t::TITLE:
+                title_screen::draw_title_screen();
+                break;
+
+            // case screen_state_t::POPUP:
+            //     popup_screen::draw_popup("This is a popup message!");
+            //     break;
+
             default:
                 ESP_LOGW("Screen", "Unknown screen state");
                 break;
@@ -75,7 +83,7 @@ void screen::set_state(screen_state_t new_state, route* curr_route)
 }
 
 screen_state_t screen::next_state() {
-    screen_state_t next_state = static_cast<screen_state_t>((static_cast<int>(_current_screen_state) + 1) % 4);
+    screen_state_t next_state = static_cast<screen_state_t>((static_cast<int>(_current_screen_state) + 1) % 6);
     return next_state;
 }
 

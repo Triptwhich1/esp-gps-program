@@ -33,6 +33,25 @@ struct inactive_screen_t {
     lv_obj_t * root;
 };
 
+struct title_screen_t {
+    lv_obj_t * root;
+    lv_obj_t * label_title;
+    lv_obj_t * label_continue;
+};
+
+struct main_menu_screen_t {
+    lv_obj_t * root;
+    lv_obj_t * button_start;
+    lv_obj_t * button_settings;
+};
+
+struct popup_screen_t {
+    lv_obj_t * root;
+    lv_obj_t * label_message;
+    lv_obj_t * button_ok;
+    lv_obj_t * button_cancel;
+};
+
 namespace overview_screen {
     void draw_overview_screen();
     void update_overview_screen(route* route_arg);
@@ -48,4 +67,16 @@ namespace route_summary_screen {
 
 namespace inactive_screen {
     void draw_inactive_screen();
+}
+
+namespace main_menu_screen {
+    void draw_main_menu_screen();
+}
+
+namespace popup_screen {
+    void draw_popup(const char* message);
+}
+
+namespace title_screen {
+    void draw_title_screen();
 }

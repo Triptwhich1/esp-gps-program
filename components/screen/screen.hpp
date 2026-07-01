@@ -10,7 +10,9 @@ enum class screen_state_t {
     OVERVIEW = 0,
     ROUTE_SUMMARY = 1,
     QR_CODE = 2,
-    INACTIVE = 3
+    INACTIVE = 3,
+    TITLE = 4,
+    // POPUP = 5,
 };
 
 class screen

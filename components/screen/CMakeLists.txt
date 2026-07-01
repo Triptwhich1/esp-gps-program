@@ -6,8 +6,13 @@ idf_component_register(
         "lvgl_screens/overview_screen.cpp"
         "lvgl_screens/qr_screen.cpp"
         "lvgl_screens/inactive_screen.cpp"
+        "lvgl_screens/main_menu.cpp"
+        "lvgl_screens/title_screen.cpp"
+        "lvgl_screens/route_summary_screen.cpp"
+        "lvgl_screens/popup_screen.cpp"
         "lvgl_screens/images/paint_1.c"
         "lvgl_screens/images/paint_3.c"
+        "lvgl_screens/images/paint_middle.c"
     INCLUDE_DIRS
         "." "i2c_setup" "lvgl_setup" "args" "lvgl_screens" "lvgl_screens/images"
     REQUIRES
