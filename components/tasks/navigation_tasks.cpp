@@ -5,10 +5,28 @@ namespace navigation_tasks {
         navigation_task_args_t *task_args = static_cast<navigation_task_args_t*>(arg);
         screen *my_screen = task_args->screen_arg;
         route *my_route = task_args->route_arg;
+        QueueHandle_t queue = task_args->queue_arg;
+        button_event_t button_event;
+
         while (1) {
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-            ESP_LOGI("Navigation", "Button pressed, starting navigation task");
-            my_screen->set_state(my_screen->next_state(), my_route);
+            xQueueReceive(queue, &button_event, portMAX_DELAY);
+            ESP_LOGI("Navigation", "Button event received: %d", button_event);
+            switch (button_event) {
+                case BUTTON_SINGLE_CLICK: 
+                    ESP_LOGI("Navigation", "Button pressed, starting navigation task");
+                    my_screen->set_state(my_screen->next_state(), my_route);
+                    break;
+                case BUTTON_LONG_PRESS_START:
+                    ESP_LOGI("Navigation", "Long button press detected");
+                    break;
+                case BUTTON_DOUBLE_CLICK:
+                    ESP_LOGI("Navigation", "Double button press detected");
+                    break;
+                default: 
+                    ESP_LOGW("Navigation", "Unknown button event: %d", button_event);
+                    break;
+            }
         }
     }
 }

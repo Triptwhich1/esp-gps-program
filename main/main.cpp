@@ -23,6 +23,7 @@
 
 QueueHandle_t route_Queue;
 QueueHandle_t navigation_Queue;
+
 gps my_gps{UART_NUM_2, RX2};
 route my_route{};
 screen my_screen{GPIO_NUM_22, GPIO_NUM_21, 128, 64};
@@ -52,8 +53,8 @@ void pm_init() {
 void btn_init() {
 
     button_config_t cfg = {
-        .long_press_time = 1500,
-        .short_press_time = 100
+        .long_press_time = 800,
+        .short_press_time = 300
     };
 
     button_gpio_config_t gpio_cfg = {
@@ -61,8 +62,20 @@ void btn_init() {
         .active_level = 0
     };
 
+    static btn_cb_args_t single_button_args = {
+        .task_handle = navigation_task_handle, 
+        .button_event = BUTTON_SINGLE_CLICK, 
+        .queue_arg = navigation_Queue};
+    static btn_cb_args_t long_button_args = {.task_handle = navigation_task_handle, .button_event = BUTTON_LONG_PRESS_START, .queue_arg = navigation_Queue};
+    static btn_cb_args_t double_button_args = {.task_handle = navigation_task_handle, .button_event = BUTTON_DOUBLE_CLICK, .queue_arg = navigation_Queue};
+
     iot_button_new_gpio_device(&cfg, &gpio_cfg, &btn);
-    iot_button_register_cb(btn, BUTTON_SINGLE_CLICK, NULL, navigation::short_press_cb, navigation_task_handle);
+    iot_button_register_cb(btn, BUTTON_SINGLE_CLICK, NULL, navigation::button_press_cb, 
+        &single_button_args);
+    iot_button_register_cb(btn, BUTTON_LONG_PRESS_START, NULL, navigation::button_press_cb, 
+        &long_button_args);
+    iot_button_register_cb(btn, BUTTON_DOUBLE_CLICK, NULL, navigation::button_press_cb, 
+        &double_button_args);
 }
 
 extern "C" void app_main(void)
@@ -71,7 +84,8 @@ extern "C" void app_main(void)
 
     // pm_init();
 
-    route_Queue = xQueueCreate(10, sizeof(gps_data_t));
+    route_Queue = xQueueCreate(3, sizeof(gps_data_t));
+    navigation_Queue = xQueueCreate(3, sizeof(button_event_t));
 
     static gps_rx_task_args_t rx_task_args{
         .gps_arg = &my_gps,
@@ -91,7 +105,8 @@ extern "C" void app_main(void)
 
     static navigation_task_args_t navigation_task_args {
         .screen_arg = &my_screen,
-        .route_arg = &my_route
+        .route_arg = &my_route,
+        .queue_arg = navigation_Queue
     };
 
     xTaskCreate(route_tasks::append_to_route_task, "append_task", 4096, &append_task_args, 1, &append_to_route_task_handle);

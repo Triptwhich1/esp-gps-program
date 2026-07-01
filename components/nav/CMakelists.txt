@@ -1,4 +1,4 @@
 idf_component_register(SRCS "navigation.cpp"
                     INCLUDE_DIRS "." 
-                    REQUIRES args)
+                    REQUIRES args button) 
 
