@@ -37,7 +37,7 @@ void screen::update_overview(route* route_arg) {
     }
 }
 
-void screen::set_state(screen_state_t new_state)
+void screen::set_state(screen_state_t new_state, route* curr_route)
 {
     if (_current_screen_state == new_state) return;
 
@@ -50,6 +50,7 @@ void screen::set_state(screen_state_t new_state)
         switch (_current_screen_state) {
             case screen_state_t::OVERVIEW:
                 overview_screen::draw_overview_screen();
+                overview_screen::update_overview_screen(curr_route);
                 break;
 
             case screen_state_t::ROUTE_SUMMARY:

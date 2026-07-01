@@ -21,4 +21,5 @@ struct route_append_task_args_t {
 
 struct navigation_task_args_t {
     screen *screen_arg;
+    route *route_arg;
 };

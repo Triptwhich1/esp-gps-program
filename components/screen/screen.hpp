@@ -26,7 +26,7 @@ public:
     esp_err_t init();
     void update_overview(route* route_arg);
 
-    void set_state(screen_state_t state);
+    void set_state(screen_state_t state, route* route_arg);
     screen_state_t next_state();
 
     uint8_t get_screen_width();

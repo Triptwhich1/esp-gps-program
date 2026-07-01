@@ -90,7 +90,8 @@ extern "C" void app_main(void)
     };
 
     static navigation_task_args_t navigation_task_args {
-        .screen_arg = &my_screen
+        .screen_arg = &my_screen,
+        .route_arg = &my_route
     };
 
     xTaskCreate(route_tasks::append_to_route_task, "append_task", 4096, &append_task_args, 1, &append_to_route_task_handle);
