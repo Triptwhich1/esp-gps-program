@@ -51,7 +51,6 @@ void pm_init() {
 }
 
 void btn_init() {
-
     button_config_t cfg = {
         .long_press_time = 800,
         .short_press_time = 300

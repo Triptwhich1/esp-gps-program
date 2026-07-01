@@ -44,7 +44,6 @@ void screen::set_state(screen_state_t new_state, route* curr_route)
     _current_screen_state = new_state;
 
     if (lvgl_port_lock(0)) {
-
         lv_obj_clean(lv_scr_act());  // clear previous screen
 
         switch (_current_screen_state) {
@@ -61,6 +60,14 @@ void screen::set_state(screen_state_t new_state, route* curr_route)
             case screen_state_t::QR_CODE:
                 qr_code_screen::draw_qr_screen();
                 break;
+
+            case screen_state_t::INACTIVE:
+                inactive_screen::draw_inactive_screen();
+                break;
+
+            default:
+                ESP_LOGW("Screen", "Unknown screen state");
+                break;
         }
 
         lvgl_port_unlock();
@@ -68,6 +75,10 @@ void screen::set_state(screen_state_t new_state, route* curr_route)
 }
 
 screen_state_t screen::next_state() {
-    screen_state_t next_state = static_cast<screen_state_t>((static_cast<int>(_current_screen_state) + 1) % 3);
+    screen_state_t next_state = static_cast<screen_state_t>((static_cast<int>(_current_screen_state) + 1) % 4);
     return next_state;
+}
+
+screen_state_t screen::get_state() {
+    return _current_screen_state;
 }

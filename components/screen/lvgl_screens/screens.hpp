@@ -29,6 +29,10 @@ struct route_summary_screen_t {
     lv_obj_t * label_total_distance;
 };
 
+struct inactive_screen_t {
+    lv_obj_t * root;
+};
+
 namespace overview_screen {
     void draw_overview_screen();
     void update_overview_screen(route* route_arg);
@@ -36,4 +40,12 @@ namespace overview_screen {
 
 namespace qr_code_screen {
     void draw_qr_screen();
+}
+
+namespace route_summary_screen {
+    void draw_route_summary_screen();
+}
+
+namespace inactive_screen {
+    void draw_inactive_screen();
 }

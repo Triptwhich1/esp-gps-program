@@ -14,11 +14,17 @@ namespace navigation_tasks {
             ESP_LOGI("Navigation", "Button event received: %d", button_event);
             switch (button_event) {
                 case BUTTON_SINGLE_CLICK: 
-                    ESP_LOGI("Navigation", "Button pressed, starting navigation task");
-                    my_screen->set_state(my_screen->next_state(), my_route);
+                    if (my_screen->get_state() == screen_state_t::INACTIVE) {
+                        ESP_LOGI("Navigation", "Screen is inactive, activating overview screen");
+                        my_screen->set_state(screen_state_t::OVERVIEW, my_route);
+                    } else {
+                        ESP_LOGI("Navigation", "Single button press detected, cycling to next screen");
+                        my_screen->set_state(my_screen->next_state(), my_route);
+                    }
                     break;
                 case BUTTON_LONG_PRESS_START:
                     ESP_LOGI("Navigation", "Long button press detected");
+                    my_screen->set_state(screen_state_t::INACTIVE);
                     break;
                 case BUTTON_DOUBLE_CLICK:
                     ESP_LOGI("Navigation", "Double button press detected");

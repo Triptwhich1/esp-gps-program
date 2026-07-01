@@ -9,7 +9,8 @@
 enum class screen_state_t {
     OVERVIEW = 0,
     ROUTE_SUMMARY = 1,
-    QR_CODE = 2
+    QR_CODE = 2,
+    INACTIVE = 3
 };
 
 class screen
@@ -27,6 +28,9 @@ public:
     void update_overview(route* route_arg);
 
     void set_state(screen_state_t state, route* route_arg);
+    void set_state(screen_state_t state) { set_state(state, nullptr); }
+
+    screen_state_t get_state();
     screen_state_t next_state();
 
     uint8_t get_screen_width();
