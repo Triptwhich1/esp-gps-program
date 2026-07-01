@@ -15,6 +15,8 @@ private:
     gps_data_t _gps_points[GPS_POINTS_MAX]; // roughly 16 hours of route tracking (with points taken every 30 seconds)
     gps_data_t *_first_gps_point;
     gps_data_t *_latest_gps_point;
+    float _latitude_sum;
+    float _longitude_sum;
     float _distance;
     uint16_t _num_points;
 public:
