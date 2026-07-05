@@ -12,7 +12,7 @@ enum class screen_state_t {
     QR_CODE = 2,
     INACTIVE = 3,
     TITLE = 4,
-    // POPUP = 5,
+    POPUP = 5
 };
 
 class screen

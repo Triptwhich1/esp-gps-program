@@ -10,8 +10,9 @@ namespace navigation_tasks {
 
         while (1) {
             ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+            ESP_LOGI("Navigation", "Notify received, waiting for queue...");
             xQueueReceive(queue, &button_event, portMAX_DELAY);
-            ESP_LOGI("Navigation", "Button event received: %d", button_event);
+            ESP_LOGI("Navigation", "Button event received: %d, current state: %d", button_event, (int)my_screen->get_state());
             switch (button_event) {
                 case BUTTON_SINGLE_CLICK: 
                     if (my_screen->get_state() == screen_state_t::INACTIVE) {
@@ -19,10 +20,7 @@ namespace navigation_tasks {
                         my_screen->set_state(screen_state_t::OVERVIEW, my_route);
                     } else if (my_screen->get_state() == screen_state_t::TITLE) {
                         ESP_LOGI("Navigation", "Screen is in title state");
-                    //     my_screen->set_state(screen_state_t::OVERVIEW, my_route);
-                    // } else if (my_screen->get_state() == screen_state_t::POPUP) {
-                        // ESP_LOGI("Navigation", "Screen popup");
-                        // my_screen->set_state(my_screen->next_state(), my_route);
+                        my_screen->set_state(screen_state_t::OVERVIEW, my_route);
                     } else {
                         ESP_LOGI("Navigation", "Single button press detected, cycling to next screen");
                         my_screen->set_state(my_screen->next_state(), my_route);

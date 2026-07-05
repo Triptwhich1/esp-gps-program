@@ -53,7 +53,7 @@ void screen::set_state(screen_state_t new_state, route* curr_route)
                 break;
 
             case screen_state_t::ROUTE_SUMMARY:
-                // route_summary_screen::draw_route_summary_screen();
+                
                 ESP_LOGI("Screen", "Route summary screen not implemented yet");
                 break;
 

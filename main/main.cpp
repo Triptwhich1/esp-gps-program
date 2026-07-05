@@ -13,6 +13,8 @@
 #include "screen.hpp"
 #include "lvgl_screens/screens.hpp"
 #include "navigation.hpp"
+#include "server.hpp"
+
 
 #include "iot_button.h"
 #include "button_gpio.h"
@@ -77,47 +79,50 @@ void btn_init() {
         &double_button_args);
 }
 
-extern "C" void app_main(void)
-{
-    ESP_LOGI("info", "program start");
+// extern "C" void app_main(void)
+// {
+//     ESP_LOGI("info", "program start");
 
-    // pm_init();
+//     // pm_init();
 
-    route_Queue = xQueueCreate(3, sizeof(gps_data_t));
-    navigation_Queue = xQueueCreate(3, sizeof(button_event_t));
+//     route_Queue = xQueueCreate(3, sizeof(gps_data_t));
+//     navigation_Queue = xQueueCreate(3, sizeof(button_event_t));
 
-    static gps_rx_task_args_t rx_task_args{
-        .gps_arg = &my_gps,
-        .queue_arg = route_Queue
-    };
+//     static gps_rx_task_args_t rx_task_args{
+//         .gps_arg = &my_gps,
+//         .queue_arg = route_Queue
+//     };
 
-    my_screen.init();
-    my_gps.init();
-    xTaskCreate(gps_tasks::rx_task, "rx_task", 4096, &rx_task_args, 1, &gps_rx_task_handle);
+//     my_screen.init();
+//     my_gps.init();
+//     xTaskCreate(gps_tasks::rx_task, "rx_task", 4096, &rx_task_args, 1, &gps_rx_task_handle);
 
-    static route_append_task_args_t append_task_args {
-        .route_arg = &my_route,
-        .screen_arg = &my_screen,
-        .queue_arg = route_Queue,
-        .rx_handle = gps_rx_task_handle
-    };
+//     static route_append_task_args_t append_task_args {
+//         .route_arg = &my_route,
+//         .screen_arg = &my_screen,
+//         .queue_arg = route_Queue,
+//         .rx_handle = gps_rx_task_handle
+//     };
 
-    static navigation_task_args_t navigation_task_args {
-        .screen_arg = &my_screen,
-        .route_arg = &my_route,
-        .queue_arg = navigation_Queue
-    };
+//     static navigation_task_args_t navigation_task_args {
+//         .screen_arg = &my_screen,
+//         .route_arg = &my_route,
+//         .queue_arg = navigation_Queue
+//     };
 
-    xTaskCreate(route_tasks::append_to_route_task, "append_task", 4096, &append_task_args, 1, &append_to_route_task_handle);
+//     xTaskCreate(route_tasks::append_to_route_task, "append_task", 4096, &append_task_args, 1, &append_to_route_task_handle);
 
-    TimerHandle_t append_timer_handle = xTimerCreate("append_timer", pdMS_TO_TICKS(append_timer.get_interval() * 1000), pdTRUE, NULL, append_to_route_timer_cb);
-    xTimerStart(append_timer_handle, 0);
+//     TimerHandle_t append_timer_handle = xTimerCreate("append_timer", pdMS_TO_TICKS(append_timer.get_interval() * 1000), pdTRUE, NULL, append_to_route_timer_cb);
+//     xTimerStart(append_timer_handle, 0);
 
-    xTaskCreate(navigation_tasks::navigation_task, "navigation_task", 2048, &navigation_task_args, 1, &navigation_task_handle);
+//     xTaskCreate(navigation_tasks::navigation_task, "navigation_task", 2048, &navigation_task_args, 1, &navigation_task_handle);
 
-    btn_init();
+//     btn_init();
 
-    while (1) {
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
+//     while (1) {
+//         vTaskDelay(pdMS_TO_TICKS(1000));
+//     }
+
+extern "C" void app_main(void) {
+    server::wifi_init();
 }
