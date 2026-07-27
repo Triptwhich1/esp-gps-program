@@ -1,5 +1,17 @@
 #include "server.hpp"
 
+extern const char script_js_start[] asm("_binary_script_js_start");
+extern const char script_js_end[]   asm("_binary_script_js_end");
+
+extern const char style_css_start[] asm("_binary_style_css_start");
+extern const char style_css_end[]   asm("_binary_style_css_end");
+
+extern const char three_min_js_start[] asm("_binary_three_min_js_start");
+extern const char three_min_js_end[]   asm("_binary_three_min_js_end");
+
+extern const char three_controls_js_start[] asm("_binary_OrbitControls_js_start");
+extern const char three_controls_js_end[]   asm("_binary_OrbitControls_js_end");
+
 static void wifi_event_handler(void* arg, esp_event_base_t event_base, int32_t event_id, void* event_data) {
     if (event_id == WIFI_EVENT_AP_STACONNECTED) {
         wifi_event_ap_staconnected_t *event = (wifi_event_ap_staconnected_t *)event_data;
@@ -62,6 +74,62 @@ namespace server {
         .handler = root_get_handler
     };
 
+        static esp_err_t script_js_get_handler(httpd_req_t *req)
+    {
+        const uint32_t len = script_js_end - script_js_start;
+        httpd_resp_set_type(req, "application/javascript");
+        httpd_resp_send(req, script_js_start, len);
+        return ESP_OK;
+    }
+
+    static const httpd_uri_t script_js_uri = {
+        .uri = "/script.js",
+        .method = HTTP_GET,
+        .handler = script_js_get_handler
+    };
+
+    static esp_err_t style_css_get_handler(httpd_req_t *req)
+    {
+        const uint32_t len = style_css_end - style_css_start;
+        httpd_resp_set_type(req, "text/css");
+        httpd_resp_send(req, style_css_start, len);
+        return ESP_OK;
+    }
+
+    static const httpd_uri_t style_css_uri = {
+        .uri = "/style.css",
+        .method = HTTP_GET,
+        .handler = style_css_get_handler
+    };
+
+    static esp_err_t three_min_js_get_handler(httpd_req_t *req)
+    {
+        const uint32_t len = three_min_js_end - three_min_js_start;
+        httpd_resp_set_type(req, "application/javascript");
+        httpd_resp_send(req, three_min_js_start, len);
+        return ESP_OK;
+    }
+
+    static const httpd_uri_t three_min_js_uri = {
+        .uri = "/inc/three.min.js",
+        .method = HTTP_GET,
+        .handler = three_min_js_get_handler
+    };
+
+    static esp_err_t three_controls_js_get_handler(httpd_req_t *req)
+    {
+        const uint32_t len = three_controls_js_end - three_controls_js_start;
+        httpd_resp_set_type(req, "application/javascript");
+        httpd_resp_send(req, three_controls_js_start, len);
+        return ESP_OK;
+    }
+
+    static const httpd_uri_t three_controls_js_uri = {
+        .uri = "/inc/OrbitControls.js",
+        .method = HTTP_GET,
+        .handler = three_controls_js_get_handler
+    };
+
     // HTTP Error (404) Handler - Redirects all requests to the root page
     esp_err_t http_404_error_handler(httpd_req_t *req, httpd_err_code_t err)
     {
@@ -91,6 +159,10 @@ namespace server {
             // Set URI handlers
             ESP_LOGI("Server", "Registering URI handlers");
             httpd_register_uri_handler(server, &root);
+            httpd_register_uri_handler(server, &script_js_uri);
+            httpd_register_uri_handler(server, &style_css_uri);
+            httpd_register_uri_handler(server, &three_min_js_uri);
+            httpd_register_uri_handler(server, &three_controls_js_uri);
             httpd_register_err_handler(server, HTTPD_404_NOT_FOUND, http_404_error_handler);
         }
         return server;
