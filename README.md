@@ -6,10 +6,13 @@ It has been created with ESP-IDF and takes power efficiency into consideration a
 OOP has been used when creating this, as it was something I wanted to learn a bit more about especially on embedded systems, this goes hand-in-hand with ESP-IDF's modular file structure where features can be split
 into components.
 
+Implemented a Wi-Fi access point, which acts as a captive portal for the user to see their route (in progress)
+
 ## Features
 - GPS route recording using a NEO-6M receiver
 - Configurable logging intervals
 - OLED status display
+- LVGL screens
 - Custom NMEA sentence parsing
 - FreeRTOS task-based architecture
 - Modular ESP-IDF component structure
@@ -21,6 +24,8 @@ into components.
 - UART communication
 - I2C communication
 - NMEA GPS protocol
+- LVGL
+- Three.js
 
 ## Future improvements
 - More screens
