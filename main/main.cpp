@@ -19,7 +19,7 @@
 #include "iot_button.h"
 #include "button_gpio.h"
 
-#define DEBUG
+// #define DEBUG
 
 #define RX2 GPIO_NUM_16
 #define BTN_PIN GPIO_NUM_12
@@ -99,8 +99,6 @@ extern "C" void app_main(void)
 {
     ESP_LOGI("info", "program start");
 
-    // pm_init();
-
     route_Queue = xQueueCreate(3, sizeof(gps_data_t));
     navigation_Queue = xQueueCreate(3, sizeof(button_event_t));
 
@@ -137,5 +135,6 @@ extern "C" void app_main(void)
 
     while (1) {
         vTaskDelay(pdMS_TO_TICKS(1000));
+    }
 }
 #endif

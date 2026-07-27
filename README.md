@@ -25,8 +25,9 @@ into components.
 ## Future improvements
 - More screens
 - Comments
-- Improved readme
-- Sleep efficiency
+- Improved readme (to be continued)
+- Sleep efficiency (put off for now)
 - Visualise recorded routes through a web-based interface.
   - Render routes in a 3D environment for post-hike analysis.
 - Add SD card storage for longer route recording sessions.
+- Accelerometer to be added
